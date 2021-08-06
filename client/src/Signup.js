@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useContext }  from 'react'
+import { UserContext } from "./context/user";
+import { useHistory } from 'react-router-dom'
 
-const Signup = ({loginUser}) => {
+const Signup = () => {
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [errorsList, setErrorsList] = useState([])
+    const {user, setUser} = useContext(UserContext);
+    const history = useHistory()
+
+    console.log("signup context", user)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -22,8 +28,10 @@ const Signup = ({loginUser}) => {
         .then(r => r.json())
         .then(user => {
             if (!user.errors) {
-                loginUser(user)
+                setUser(user)
+                history.push('/')
               } else {
+                setName("")
                 setPassword("")
                 setPasswordConfirmation("")
                 const errorLis = user.errors.map(e => <li>{e}</li>)

@@ -2,7 +2,7 @@ class CommandsController < ApplicationController
     before_action :authorize
 
     def index
-        user = User.find_by(id: session[:user_id])
+        user = current_user
         commands = user.commands
         render json: commands
     end

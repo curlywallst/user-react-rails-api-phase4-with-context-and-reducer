@@ -1,14 +1,28 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useContext }  from 'react'
+import { UserContext } from "./context/user";
+import { NavLink,  useHistory} from 'react-router-dom'
 
-const Navbar = (props) => {
+const Navbar = () => {
+    const {user, setUser} = useContext(UserContext);
+    console.log("navbar context", user)
+    const history = useHistory()
+  
+    const logoutUser = () => {
+      fetch('/logout', {
+        method: 'DELETE'
+      })
+      .then(() => {
+        setUser()
+      })
+      history.push('/')
+    }
 
-    if (props.loggedIn){
+    if (user){
         return (
         <div>
-            <h1>Hello {props.user.name}</h1>
+            <h1>Hello {user.name}</h1>
             <br/>
-            <button onClick={props.logoutUser} >Logout</button>
+            <button onClick={logoutUser} >Logout</button>
             <NavLink to="/commands">
                 <button>Commands</button>
             </NavLink>
