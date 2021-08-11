@@ -1,64 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { Route, useRouteMatch } from "react-router-dom";
 import CommandForm from './CommandForm'
 import CommandLinks from './CommandLinks'
 import Command from './Command'
-import useCommands from './hooks/useCommands'
+// import useCommands from './hooks/useCommands'
+import { UserContext } from "./context/user";
 
 const Commands = () => {
-    // const [commands, setCommands] = useState([])
-    const [error, setError] = useState("")
+    const {user, commands, addCommand} = useContext(UserContext);
     const [formFlag, setFormFlag] = useState(false)
-
     const match = useRouteMatch();
-    console.log("commands", match);
 
-    // useEffect(() => {
-    //     fetch('/commands')
-    //     .then(r => r.json())
-    //     .then(data => {
-    //         console.log("use effect", data)
-    //         if (data.error){
-    //             setError(data.error)
-    //         } else {
-    //             setCommands(data)
-    //         }
-    //     })
-    // }, [])
-    const {commands} = useCommands()
-    console.log("use effect", commands)
-
-    // if (data.error){
-    //     setError(data.error)
-    // } else {
-    //     setCommands(data)
-    // }
-
-    const addCommand = (command) =>{
-        // fetch('/commands', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(command)
-        // })
-        // .then(r => r.json())
-        // .then(data => {
-        //     console.log(data)
-        //     setCommands([...commands, data])
-        //     setFormFlag(false)
-        // })
+    const addACommand = (command) => {
+        addCommand(command)
+        setFormFlag(false)
     }
 
-    if (error === ""){
+    if (user){
         if (match.isExact) {
             return (
                 <div>
                     <ul>
-                        <CommandLinks commands={commands} />
+                        <CommandLinks />
                         <br/>
                         {formFlag ? 
-                            <CommandForm addACommand={addCommand} /> 
+                            <CommandForm addACommand={addACommand} /> 
                             :
                             <button onClick={() => setFormFlag(true)}>Add Command</button>
                         }

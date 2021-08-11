@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { UserContext } from "./context/user";
 
-const CommandLinks = ({commands}) => {
+const CommandLinks = () => {
+    const {commands, deleteCommand} = useContext(UserContext);
     const commandsList = commands.map(c =>
         <div key={c.id}>
             <Link to={`/commands/${c.id}`}>
                 {c.name}
-            </Link>         
+            </Link>  <button onClick={() => {deleteCommand(c.id)}}>  x</button>       
             <br />
         </div>
     )

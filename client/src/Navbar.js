@@ -3,8 +3,7 @@ import { UserContext } from "./context/user";
 import { NavLink,  useHistory} from 'react-router-dom'
 
 const Navbar = () => {
-    const {user, setUser} = useContext(UserContext);
-    console.log("navbar context", user)
+    const {user, logout} = useContext(UserContext);
     const history = useHistory()
   
     const logoutUser = () => {
@@ -12,7 +11,7 @@ const Navbar = () => {
         method: 'DELETE'
       })
       .then(() => {
-        setUser()
+        logout()
       })
       history.push('/')
     }

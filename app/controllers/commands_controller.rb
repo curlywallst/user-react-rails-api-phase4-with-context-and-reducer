@@ -23,6 +23,16 @@ class CommandsController < ApplicationController
         end
     end
 
+    def destroy
+        user = User.find_by(id: session[:user_id])
+        command = user.commands.find_by(id: params[:id])
+        if command
+            command.destroy
+        else
+            render json: {error: "Not found"}, status: :unauthorized
+        end
+    end
+
     private
 
     def command_params
