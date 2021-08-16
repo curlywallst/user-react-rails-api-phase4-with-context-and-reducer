@@ -7,10 +7,8 @@ const Signup = () => {
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [errorsList, setErrorsList] = useState([])
-    const {user, setUser} = useContext(UserContext);
+    const {signup} = useContext(UserContext);
     const history = useHistory()
-
-    console.log("signup context", user)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -28,7 +26,7 @@ const Signup = () => {
         .then(r => r.json())
         .then(user => {
             if (!user.errors) {
-                setUser(user)
+                signup(user)
                 history.push('/')
               } else {
                 setName("")

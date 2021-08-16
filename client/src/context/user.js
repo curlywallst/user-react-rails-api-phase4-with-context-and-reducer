@@ -68,8 +68,12 @@ function UserProvider({ children }) {
       fetchCommands()
     }
 
+    const signup = (u) => {
+      setUser(u) 
+    }
+
     return (
-      <UserContext.Provider value={{user, login, logout, commands, addCommand, deleteCommand}}>
+      <UserContext.Provider value={{user, login, logout, signup, commands, addCommand, deleteCommand}}>
         {children}
       </UserContext.Provider>
     );
