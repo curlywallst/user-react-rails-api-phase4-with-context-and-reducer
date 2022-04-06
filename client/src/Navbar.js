@@ -3,7 +3,7 @@ import { UserContext } from "./context/user";
 import { NavLink,  useHistory} from 'react-router-dom'
 
 const Navbar = () => {
-    const {user, logout} = useContext(UserContext);
+    const {state, logout} = useContext(UserContext);
     const history = useHistory()
   
     const logoutUser = () => {
@@ -16,10 +16,10 @@ const Navbar = () => {
       history.push('/')
     }
 
-    if (user){
+    if (state.user.name){
         return (
         <div>
-            <h1>Hello {user.name}</h1>
+            <h1>Hello {state.user.name}</h1>
             <br/>
             <button onClick={logoutUser} >Logout</button>
             <NavLink to="/commands">

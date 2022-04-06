@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "./context/user";
 
 const Command = (props) => {
-    const {commands} = useContext(UserContext);
+    const {state} = useContext(UserContext);
     // const [error, setError] = useState("")
     const params = useParams();
 
     // if (error === "") {
-        const command = commands.find(c => `${c.id}` === params.id)
+        const command = state.user.commands.find(c => `${c.id}` === params.id)
         if (command){
             return (
                 <div>

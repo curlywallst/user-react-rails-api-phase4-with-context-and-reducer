@@ -7,7 +7,7 @@ import Command from './Command'
 import { UserContext } from "./context/user";
 
 const Commands = () => {
-    const {user, commands, addCommand} = useContext(UserContext);
+    const {state, addCommand} = useContext(UserContext);
     const [formFlag, setFormFlag] = useState(false)
     const match = useRouteMatch();
 
@@ -16,7 +16,7 @@ const Commands = () => {
         setFormFlag(false)
     }
 
-    if (user){
+    if (state.user.name){
         if (match.isExact) {
             return (
                 <div>
@@ -36,7 +36,7 @@ const Commands = () => {
             return (
                 <div>
                     <Route path={`${match.url}/:id`}>
-                        <Command commands={commands} />
+                        <Command commands={state.user.commands} />
                     </Route>
                 </div>
             )

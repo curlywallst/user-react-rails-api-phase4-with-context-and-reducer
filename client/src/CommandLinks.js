@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { UserContext } from "./context/user";
 
 const CommandLinks = () => {
-    const {commands, deleteCommand} = useContext(UserContext);
-    const commandsList = commands.map(c =>
+    const {state, deleteCommand} = useContext(UserContext);
+    const commandsList = state.user.commands.map(c =>
         <div key={c.id}>
             <Link to={`/commands/${c.id}`}>
                 {c.name}

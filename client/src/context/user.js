@@ -1,35 +1,43 @@
 // src/context/user.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
+import reducer from './Reducer'
 
-// Create context
-const UserContext = React.createContext(); 
+const UserContext = React.createContext();
 
-// create a provider component
-function UserProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [commands, setCommands] = useState([])
-
-    useEffect(() => {
-        fetch('/me')
-        .then(r => {
-          if (r.ok) {
-            r.json()
-            .then( u => {
-              setUser(u)
-              fetchCommands()
-            })
+const Provider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, {
+          user: {
+            commands: []
           }
-        })
-      }, [])
+        });
 
-    const fetchCommands = () => {
-      fetch('/commands')
-      .then(r => r.json())
-      .then(data => {
-          console.log(data)
-          setCommands(data)
-      })
-    }
+  useEffect(() => {
+    fetch('/me')
+    .then(r => {
+      if (r.ok) {
+        r.json()
+        .then( u => {
+          dispatch({
+            type: "loginUser",
+            payload: u
+          })
+        })
+      }
+    })
+  }, [])
+
+//   const value = {
+//     todoList: state.todoList,
+//     addTodoItem: (todoItemLabel) => {
+//       dispatch({ type: actions.ADD_TODO_ITEM, todoItemLabel });
+//     },
+//     removeTodoItem: (todoItemId) => {
+//       dispatch({ type: actions.REMOVE_TODO_ITEM, todoItemId });
+//     },
+//     markAsCompleted: (todoItemId) => {
+//       dispatch({ type: actions.TOGGLE_COMPLETED, todoItemId });
+//     }
+//   };
 
     const addCommand = (command) =>{
       fetch('/commands', {
@@ -41,7 +49,11 @@ function UserProvider({ children }) {
       })
       .then(r => r.json())
       .then(data => {
-          setCommands([...commands, data])
+          dispatch({
+            type: "addCommand",
+            payload: data
+          })
+          console.log(state)
       })
     }
 
@@ -51,32 +63,40 @@ function UserProvider({ children }) {
         headers: {
             'Content-Type': 'application/json'
         },
-    })
-    .then(() => {
-      const newCommands = commands.filter( c => c.id != id)
-      setCommands(newCommands)
-    }
-      )
+      })
+      .then(() => {
+        dispatch({
+          type: "deleteCommand",
+          payload: id
+        })
+        console.log(state)
+      })
     }
 
     const logout = () => {
-      setUser(null)
+      dispatch({
+        type: "logoutUser"
+      })
     }
 
     const login = (u) => {
-      setUser(u)
-      fetchCommands()
+      dispatch({
+        type: "loginUser",
+        payload: u
+      })
     }
 
     const signup = (u) => {
-      setUser(u) 
+      console.log(u)
+
     }
 
-    return (
-      <UserContext.Provider value={{user, login, logout, signup, commands, addCommand, deleteCommand}}>
+console.log("state", state)
+  return (
+      <UserContext.Provider value={{state, login, logout, signup, addCommand, deleteCommand}}>
         {children}
       </UserContext.Provider>
-    );
-}
-  
-  export { UserContext, UserProvider }; 
+  );
+};
+
+export { UserContext, Provider }

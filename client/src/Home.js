@@ -3,14 +3,14 @@ import { UserContext } from "./context/user";
 
 const Home = () => {
     
-    const {user} = useContext(UserContext);
+    const {state} = useContext(UserContext);
 
-    if (!user) {
+    if (!state.user.name) {
         return (<h3>Please Login or Signup</h3>)
     } else {
         return (
             <div>
-                <h3>{user.name}'s Home Page</h3>
+                <h3>{state.user.name}'s Home Page</h3>
             </div>
         )
     }
